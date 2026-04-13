@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "709676444596",
+    "project_id": "buildstepspro",
+    "storage_bucket": "buildstepspro.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:709676444596:android:39235243d99de2ba2b60e1",
+        "android_client_info": {
+          "package_name": "com.buildSteps.BuildStepsPro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCC3vX4_qrlX0I5a8Z9ABJvNKWyxPPfTaI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
