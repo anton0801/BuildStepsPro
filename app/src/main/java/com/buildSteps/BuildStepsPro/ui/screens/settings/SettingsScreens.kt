@@ -1,7 +1,15 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 package com.buildSteps.BuildStepsPro.ui.screens.settings
 
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.copy
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.*
@@ -9,9 +17,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
 import com.buildSteps.BuildStepsPro.data.model.AppNotification
@@ -336,7 +346,67 @@ fun SettingsScreen(vm: MainViewModel, onBack: () -> Unit, onProfileClick: () -> 
                     color = TextHint, fontWeight = FontWeight.SemiBold)
                 Text("Version 1.0.0", style = MaterialTheme.typography.bodySmall, color = TextHint)
             }
-            Spacer(Modifier.height(40.dp))
+            PrivacyPolicyButton()
+            Spacer(Modifier.height(120.dp))
         }
+    }
+}
+
+val SkyBlue        = Color(0xFF4DDFFF)
+val LavenderPink   = Color(0xFFC266FF)
+
+private const val PRIVACY_POLICY_URL = "https://buildstepspro.com/privacy-policy.html"
+
+@Composable
+private fun PrivacyPolicyButton() {
+    val context = LocalContext.current
+    val interactionSource = remember { MutableInteractionSource() }
+    val pressed by interactionSource.collectIsPressedAsState()
+    val scale by animateFloatAsState(
+        targetValue   = if (pressed) 0.96f else 1f,
+        animationSpec = spring(dampingRatio = 0.5f, stiffness = Spring.StiffnessHigh),
+        label         = "ppScale"
+    )
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .scale(scale)
+            .clip(androidx.compose.foundation.shape.RoundedCornerShape(14.dp))
+            .background(
+                brush = Brush.horizontalGradient(
+                    listOf(SkyBlue.copy(alpha = 0.12f), LavenderPink.copy(alpha = 0.10f))
+                )
+            )
+            .border(
+                width = 1.dp,
+                brush = Brush.horizontalGradient(
+                    listOf(SkyBlue.copy(alpha = 0.35f), LavenderPink.copy(alpha = 0.25f))
+                ),
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(14.dp)
+            )
+            .clickable(
+                interactionSource = interactionSource,
+                indication        = null,
+            ) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(PRIVACY_POLICY_URL))
+                context.startActivity(intent)
+            }
+            .padding(horizontal = 16.dp, vertical = 14.dp),
+        verticalAlignment     = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text("🔒", fontSize = 18.sp)
+            Spacer(Modifier.width(10.dp))
+            Text(
+                "Privacy Policy",
+                style = MaterialTheme.typography.bodyLarge,
+            )
+        }
+        Text(
+            "↗",
+            style = MaterialTheme.typography.bodyLarge,
+        )
     }
 }
